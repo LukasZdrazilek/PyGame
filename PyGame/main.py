@@ -1,20 +1,60 @@
-from math import fabs
-import pygame, sys
+from ast import Try
+import pygame
 from pygame.locals import *
+import sys
 from player import Player
 from draw import *
 from NPC import NPC
 from map import *
+from menu import MainMenu
+from interface import GameTimer
+from saving import load_game, save_game
 
 pygame.init()
 
+# Nastaveni a inicializace obrazovky
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 960
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.DOUBLEBUF)
 # Nastaveni pro resize a fullscreen
 DISPLAYSURF = pygame.display.set_mode((1280, 960), RESIZABLE)
+# Inicializace Main menu
+main_menu = MainMenu(screen)
+# Inicializace timeru
+game_timer = GameTimer()
 
 player = Player()
+
+# Main menu loop
+while True:
+    
+    menu_option = main_menu.handle_input()
+
+    # Pokud existuje save, nacte z nej pozici hrace, casovac a spusti hru
+    if menu_option == 'Continue':
+       try:
+           load_game(player, game_timer)
+           break
+       except FileNotFoundError:
+           print("Saved game not found")
+    
+    # Spusti hru a vytvori save s pocatecnimi souradnicemi hrace
+    elif menu_option == 'New game':
+       save_game(player, game_timer)
+       game_timer.start()
+       break
+    
+    # Vypne hru
+    elif menu_option == 'Exit' or menu_option == 'exit':
+        pygame.quit()
+        sys.exit()
+
+    main_menu.draw()
+    pygame.display.flip()
+    
+
+################################### Game loop ########################################
+
 npc = NPC()
 run = True
 clock = pygame.time.Clock()
@@ -35,10 +75,17 @@ while run:
         if event.type == pygame.QUIT:
             run = False
         if key[pygame.K_ESCAPE]:
+            # Pri ukonceni hry ulozi souradnice a cas hrace
+            save_game(player, game_timer)
+            print("Game saved")
             run = False
-    
+            
+
+    # Update casovace
+    game_timer.update()    
     # Update player controls
     player.controls(dt, map_objects)
+    
     # Check collision for player considering camera offsetb
     player.canWalk = False#####################################################################################
     for obj in map_objects[player.current_screen]:
@@ -59,8 +106,10 @@ while run:
     #for obj in map_objects[player.current_screen]:
     #    obj.draw(screen)
         
-
     draw(player, npc, screen)
+    game_timer.draw(screen)
+
+    #print(player.xFallingSpeed)
 
     # Kresleni pozadi, NPC a hrace
     #if player.current_screen == 0:
@@ -73,3 +122,4 @@ while run:
     pygame.display.flip()
 
 pygame.quit()
+sys.exit()

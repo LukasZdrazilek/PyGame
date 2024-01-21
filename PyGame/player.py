@@ -24,8 +24,8 @@ class Player:
         self.rect = self.image.get_rect()
         
         # Nastaveni pocatecni pozice hrace
-        self.rect.x = 1000
-        self.rect.y = 0
+        self.rect.x = 600
+        self.rect.y = 700
 
         self.isJumping = False
         self.isInJump = False
@@ -159,11 +159,11 @@ class Player:
             if self.countTime2 == True:
                 self.jump_end_time = aktualni_cas
                 self.countTime2 = False
- 
+
             # Maximalni vyska skoku podle max casu
             self.jump_duration = self.jump_end_time - self.jump_start_time
-            if self.jump_duration > 1500:
-                self.jump_duration = 1500
+            if self.jump_duration > 1200:   # Zde se upravuje max vyska skoku v milisekundach
+                self.jump_duration = 1200
 
             # Dokud se aktualni cas nerovna aktualnimu casu + doby skoku, hrac skace
             if aktualni_cas <= (self.jump_end_time + (self.jump_duration)):
@@ -176,10 +176,8 @@ class Player:
                        self.image = self.Ted_jump_right
                    elif self.wasMovingLeft == True:
                        self.image = self.Ted_jump_left
-                   self.rect.y -= (1900.0 - self.xJumpingSlowdown) * dt
-                   self.xJumpingSlowdown += 15
-                   if self.xJumpingSlowdown > 1600:
-                       self.xJumpingSlowdown = 1600
+                   self.rect.y -= (2500.0 - self.xJumpingSlowdown) * dt     # Zde se upravuje sila skoku
+                   self.xJumpingSlowdown += 30000.0 / (self.jump_duration / 2) # 25  # Zde se upravuje postupne zpomaleni skoku (cislo 30.000 vymysleno podle pocitu)
                    
                    # Skok vlevo a vpravo nahoru
                    if self.jumpingLeft == True:
@@ -208,27 +206,35 @@ class Player:
                        self.rect.x += 700 * dt 
                        
                else:
+                   #######################################################
+                   self.rect.y += (-410.0 + self.yJumpingSlowdown) * dt
+                   self.yJumpingSlowdown += 60#############################
+                   if self.yJumpingSlowdown > 1200:                 # 690 max
+                       self.yJumpingSlowdown = 1200
 
                    # Padani vlevo a vpravo pouze vlivem gravitace ale stale v case padani
                    if self.jumpingLeft == True:
                        self.image = self.Ted_fall_left
-                       self.rect.x -= (1200 - self.xJumpingSlowdown) * dt
-                       self.xJumpingSlowdown += 20 
-                       if self.xJumpingSlowdown > 1200:
-                           self.xJumpingSlowdown = 1200
+                       self.rect.x -= 700 * dt
 
                    if self.jumpingRight == True:
                        self.image = self.Ted_fall_right
-                       self.rect.x += (1200 - self.xJumpingSlowdown) * dt  
-                       self.xJumpingSlowdown += 20
-                       if self.xJumpingSlowdown > 1200:
-                           self.xJumpingSlowdown = 1200
+                       self.rect.x += 700 * dt  
                            
             
             else:
                 # Hrac uz neskace, neni v case skoku, jen pada gravitaci
                 self.isInJump = False
                 
+                # Padani vlevo a vpravo pouze vlivem gravitace
+                if self.jumpingLeft == True:
+                    self.image = self.Ted_fall_left         ############### Nejde to udelat smooth ( zatim )
+                    self.rect.x -= (200) * dt
+
+                elif self.jumpingRight == True:
+                    self.image = self.Ted_fall_right
+                    self.rect.x += (200) * dt
+                    
                 
                 # Spadl dolu, je na zemi nebo platforme
                 if self.canWalk == True:
@@ -242,6 +248,9 @@ class Player:
                     self.movingLeft = False
                     self.movingRight = False
                     self.xJumpingSlowdown = 0
+                    self.yJumpingSlowdown = 0
+                    self.xFallingSpeed = 300
+
 
         # Kontrola proti skakani v padani
         if self.isInJump == False and self.canWalk == False:
@@ -258,7 +267,7 @@ class Player:
                 self.isFallingRight = True
                 self.image = self.Ted_fall_right
                 self.rect.x += (self.xFallingSpeed) * dt
-                self.xFallingSpeed -= 7                    # SMOOTH JUMP
+                self.xFallingSpeed -= 12                    # SMOOTH FALL
                 if self.xFallingSpeed < 0:
                     self.xFallingSpeed = 0
                 
@@ -266,7 +275,7 @@ class Player:
                 self.isFallingLeft = True
                 self.image = self.Ted_fall_left
                 self.rect.x -= (self.xFallingSpeed) * dt
-                self.xFallingSpeed -= 7
+                self.xFallingSpeed -= 12
                 if self.xFallingSpeed < 0:
                     self.xFallingSpeed = 0
         else:
@@ -344,5 +353,5 @@ class Player:
 
 # Zachyceni na platforme ------------------- Je to gravitaci        NOT A PROBLEM?? maybe..
 
-# !!!!!!!!!!!!! BIG PROBLEM - ve skoku se da mezernikem zastavit a v padu po skoku taky !!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!! BIG PROBLEM (?)- ve skoku se da mezernikem zastavit a v padu po skoku taky !!!!!!!!!!!!!!!!!!
 

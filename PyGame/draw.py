@@ -19,5 +19,8 @@ def draw(player, npc, screen):
 
     if player.current_screen == 0:
         npc.draw(screen)
+        npc.update()
+        npc.speak(screen)
         
     player.draw(screen)
+
