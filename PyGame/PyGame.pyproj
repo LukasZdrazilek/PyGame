@@ -5,7 +5,7 @@
     <ProjectGuid>4450c930-6795-4fb0-bcbe-73db125c667d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>main.py</StartupFile>
-    <SearchPath>..\PyGame</SearchPath>
+    <SearchPath>..\PyGame;..\PyGame</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>PyGame</Name>

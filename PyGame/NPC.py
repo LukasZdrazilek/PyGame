@@ -43,6 +43,7 @@ class NPC:
             self.image = self.textures[self.image_index]
             self.last_texture_change = time.time()
 
+
     def draw(self, screen):
         
         screen.blit(self.image, self.rect)

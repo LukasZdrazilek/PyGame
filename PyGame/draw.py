@@ -13,7 +13,7 @@ screen_backgrounds.append(background2)
 screen_backgrounds.append(background3)
 
 # Kresleni pozadi, NPC a hrace
-def draw(player, npc, screen):
+def draw(player, npc, screen, game_timer):
     
     screen.blit(screen_backgrounds[player.current_screen], (0, 0))
 
@@ -23,4 +23,6 @@ def draw(player, npc, screen):
         npc.speak(screen)
         
     player.draw(screen)
+    
+    game_timer.draw(screen)
 

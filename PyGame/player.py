@@ -347,11 +347,13 @@ class Player:
 
 ################################# TO DO LIST ####################################
 
-# +u dotyku leve nebo prave zdi se zmeni textura na padani vlevo nebo vpravo ????       u prave zdi self.canWalk = False a self.fallingRight = True     FIXED KINDA
-
 # Kdyz drzim A nebo D pri schazeni platformy dolu tak to neni smooth, jde rovne dolu //// kdyz pada tak self.canWalk = False
 
 # Zachyceni na platforme ------------------- Je to gravitaci        NOT A PROBLEM?? maybe..
 
 # !!!!!!!!!!!!! BIG PROBLEM (?)- ve skoku se da mezernikem zastavit a v padu po skoku taky !!!!!!!!!!!!!!!!!!
+
+#   Udelat coins
+
+#   Dodelat NPC
 

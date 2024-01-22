@@ -46,7 +46,7 @@ def create_map_object(x, y, width, height, screenNo, type):
 
 
 # Funkce ktera cte z textaku mapy podle znaku, '\n' mezi nimi = nova screen
-# '+' = rectangle ktery nic nedela, '-' = nic se nevykresli, 'T' = top platform kdy se aktivuje horni kolize, 
+# '+' = rectangle ktery funguje jako bocni kolize ( zdi a platformy), '-' = nic se nevykresli, 'T' = top platform kdy se aktivuje horni kolize, 
 # 'B' = bot platform kdy se aktivuje spodni kolize, 'S' = solo platform kdy se aktivuji obe kolize
 with open("map.txt", "r") as file:
     content = file.read()

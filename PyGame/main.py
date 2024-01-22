@@ -9,6 +9,7 @@ from map import *
 from menu import MainMenu
 from interface import GameTimer
 from saving import load_game, save_game
+from coins import Coins
 
 pygame.init()
 
@@ -36,7 +37,7 @@ while True:
            load_game(player, game_timer)
            break
        except FileNotFoundError:
-           print("Saved game not found")
+           main_menu.saveError = True
     
     # Spusti hru a vytvori save s pocatecnimi souradnicemi hrace
     elif menu_option == 'New game':
@@ -56,6 +57,7 @@ while True:
 ################################### Game loop ########################################
 
 npc = NPC()
+coins = Coins()
 run = True
 clock = pygame.time.Clock()
 
@@ -97,27 +99,10 @@ while run:
                 player.jumpingRight = False
                 player.jumpingLeft = False
                 
-    #print(player.isInJump)
-           
-    #print (f'Falling right =   {player.isFallingRight}')
-    #print (f'Can walk =  {player.canWalk}')
 
-    # Vykresleni objektu mapy podle aktualni obrazovky hrace        - neni vlastne potreba
-    #for obj in map_objects[player.current_screen]:
-    #    obj.draw(screen)
-        
-    draw(player, npc, screen)
-    game_timer.draw(screen)
-
-    #print(player.xFallingSpeed)
-
-    # Kresleni pozadi, NPC a hrace
-    #if player.current_screen == 0:
-    #    screen.blit(background1, (0, 0))
-    #    npc.draw(screen)
-    #elif player.current_screen == 1:
-    #    screen.blit(background2, (0, 0))
-    #player.draw(screen)
+    
+    draw(player, npc, screen, game_timer)
+    coins.handle_coins(screen, player)
 
     pygame.display.flip()
 
