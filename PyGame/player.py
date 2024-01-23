@@ -353,7 +353,7 @@ class Player:
 
 # !!!!!!!!!!!!! BIG PROBLEM (?)- ve skoku se da mezernikem zastavit a v padu po skoku taky !!!!!!!!!!!!!!!!!!
 
-#   Udelat coins
+#   Coins TEXTURY
 
 #   Dodelat NPC
 

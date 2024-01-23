@@ -19,14 +19,17 @@ SCREEN_HEIGHT = 960
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.DOUBLEBUF)
 # Nastaveni pro resize a fullscreen
 DISPLAYSURF = pygame.display.set_mode((1280, 960), RESIZABLE)
+
 # Inicializace Main menu
 main_menu = MainMenu(screen)
 # Inicializace timeru
 game_timer = GameTimer()
-
+# Inicializace hrace
 player = Player()
+# Inicializace coins
+coins = Coins()
 
-# Main menu loop
+############################## Main menu loop #########################################
 while True:
     
     menu_option = main_menu.handle_input()
@@ -34,14 +37,14 @@ while True:
     # Pokud existuje save, nacte z nej pozici hrace, casovac a spusti hru
     if menu_option == 'Continue':
        try:
-           load_game(player, game_timer)
+           load_game(player, game_timer, coins)
            break
        except FileNotFoundError:
            main_menu.saveError = True
     
     # Spusti hru a vytvori save s pocatecnimi souradnicemi hrace
     elif menu_option == 'New game':
-       save_game(player, game_timer)
+       save_game(player, game_timer, coins)
        game_timer.start()
        break
     
@@ -57,7 +60,6 @@ while True:
 ################################### Game loop ########################################
 
 npc = NPC()
-coins = Coins()
 run = True
 clock = pygame.time.Clock()
 
@@ -78,7 +80,7 @@ while run:
             run = False
         if key[pygame.K_ESCAPE]:
             # Pri ukonceni hry ulozi souradnice a cas hrace
-            save_game(player, game_timer)
+            save_game(player, game_timer, coins)
             print("Game saved")
             run = False
             
@@ -99,7 +101,7 @@ while run:
                 player.jumpingRight = False
                 player.jumpingLeft = False
                 
-
+    print(coins.player_coins)
     
     draw(player, npc, screen, game_timer)
     coins.handle_coins(screen, player)
