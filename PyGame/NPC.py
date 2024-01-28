@@ -53,6 +53,8 @@ class NPC:
         self.play_sound_lessExcited = True
         self.play_sound_excited2 = True
         self.play_sound_lessExcited2 = True
+        self.play_sound_excited3 = True
+        self.play_sound_lessExcited3 = True
         self.play_sound_dogFetch = True
         self.play_sound_wisdom11 = True
         self.play_sound_wisdom12 = True
@@ -172,9 +174,9 @@ class NPC:
         # Monolog k wisdom 3 v case
         if self.told_wisdom == 3 and self.start_wisdom_timer3:
             self.text = "                        Behold! A wisdom:"
-            if self.play_sound_excited:
+            if self.play_sound_excited3:
                 self.sound_excited.play(0)
-                self.play_sound_excited = False
+                self.play_sound_excited3 = False
         if self.told_wisdom == 3 and self.aktualni_wisdom_cas >= self.wisdom_time + 3000 and self.start_wisdom_timer3:
             self.text = "       Life is not about how far can you jump,"
             if self.play_sound_wisdom31:
@@ -187,9 +189,9 @@ class NPC:
                 self.play_sound_wisdom32 = False
         if self.told_wisdom == 3 and self.aktualni_wisdom_cas >= self.wisdom_time + 9000 and self.start_wisdom_timer3:
             self.text = "             Aaaah, now that's a real wisdom!"
-            if self.play_sound_lessExcited:
+            if self.play_sound_lessExcited3:
                 self.sound_lessExcited.play(0)
-                self.play_sound_lessExcited = False
+                self.play_sound_lessExcited3 = False
         if self.told_wisdom == 3 and self.aktualni_wisdom_cas >= self.wisdom_time + 12000:
             self.start_wisdom_timer3 = False   
 
