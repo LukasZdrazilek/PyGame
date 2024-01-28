@@ -6,8 +6,11 @@ class MainMenu:
     
     def __init__(self, screen):
         
+        # Nacitani grafiky
         self.background = pygame.image.load('Textures/menu_image.png')
+        self.logo = pygame.image.load('Textures/logo.png')
 
+        # Nacitani textu a parametru
         self.screen = screen
         self.font = pygame.font.Font(None, 90)
         self.font2 = pygame.font.Font(None, 36)
@@ -15,16 +18,20 @@ class MainMenu:
         self.text = "Game saves data automatically after exiting ( Esc )"
         self.selected_option = 0
         self.saveError = False
+        self.play_music = True
         
 
+    # Kresleni elementu menu
     def draw(self):
-        
+
         key = pygame.key.get_pressed()
         self.screen.fill((82, 19, 16))
         
         text2 = self.font2.render(self.text, True, (255, 255, 255))
         
         self.screen.blit(self.background, (80, 80))
+        
+        self.screen.blit(self.logo, (100, 520))
 
         self.screen.blit(text2, (650, 920))
 
@@ -35,6 +42,7 @@ class MainMenu:
             text_sprite = text.get_rect(center = (1280 // 2 + 300, 960 // 2 - 100 + i * 150))
             self.screen.blit(text, text_sprite)
             
+        # Save error pop-up pokud vyberete 'Continue' bez predtim ulozene hry
         if self.saveError == True:
             self.save_not_found()
             for event in pygame.event.get():
@@ -42,6 +50,7 @@ class MainMenu:
                     self.saveError = False
             
     
+    # Logika ovladani menu (W, S nebo sipkama)
     def handle_input(self):
         
         key = pygame.key.get_pressed()
@@ -62,6 +71,7 @@ class MainMenu:
         return None
 
     
+    #Save error pop-up pokud vyberete 'Continue' bez predtim ulozene hry
     def save_not_found(self):
         
         self.screen.fill((82, 19, 16))

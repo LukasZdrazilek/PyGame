@@ -27,6 +27,7 @@ class Player:
         self.rect.x = 600
         self.rect.y = 700
 
+        # Pomocne veci
         self.isJumping = False
         self.isInJump = False
         self.isFalling = False
@@ -53,6 +54,7 @@ class Player:
         self.yJumpingSlowdown = 0
         self.xFallingSpeed = 300
         
+        # Cas na zmenu textury behu
         self.last_texture_change_time = pygame.time.get_ticks()
         self.texture_change_interval = 100
 
@@ -177,7 +179,7 @@ class Player:
                    elif self.wasMovingLeft == True:
                        self.image = self.Ted_jump_left
                    self.rect.y -= (2500.0 - self.xJumpingSlowdown) * dt     # Zde se upravuje sila skoku
-                   self.xJumpingSlowdown += 30000.0 / (self.jump_duration / 2) # 25  # Zde se upravuje postupne zpomaleni skoku (cislo 30.000 vymysleno podle pocitu)
+                   self.xJumpingSlowdown += 30000.0 / (self.jump_duration / 2) # Zde se upravuje postupne zpomaleni skoku (cislo 30.000 vymysleno podle pocitu)
                    
                    # Skok vlevo a vpravo nahoru
                    if self.jumpingLeft == True:
@@ -206,10 +208,9 @@ class Player:
                        self.rect.x += 700 * dt 
                        
                else:
-                   #######################################################
                    self.rect.y += (-410.0 + self.yJumpingSlowdown) * dt
-                   self.yJumpingSlowdown += 60#############################
-                   if self.yJumpingSlowdown > 1200:                 # 690 max
+                   self.yJumpingSlowdown += 60
+                   if self.yJumpingSlowdown > 1200:
                        self.yJumpingSlowdown = 1200
 
                    # Padani vlevo a vpravo pouze vlivem gravitace ale stale v case padani
@@ -228,7 +229,7 @@ class Player:
                 
                 # Padani vlevo a vpravo pouze vlivem gravitace
                 if self.jumpingLeft == True:
-                    self.image = self.Ted_fall_left         ############### Nejde to udelat smooth ( zatim )
+                    self.image = self.Ted_fall_left
                     self.rect.x -= (200) * dt
 
                 elif self.jumpingRight == True:
@@ -255,19 +256,19 @@ class Player:
         # Kontrola proti skakani v padani
         if self.isInJump == False and self.canWalk == False:
             if key[pygame.K_SPACE]:
-                self.isJumping = False#####################################################
+                self.isJumping = False
                 self.countTime1 = False
             else:
                 self.countTime1 = True
 
-        # X pohyb v padani po skoku nebo po sejiti z platformy
+        # X pohyb v padani po skoku nebo po sejiti z platformy  (Cursed AF but kinda works)
         if not self.isJumping and not key[pygame.K_a] and not key[pygame.K_d] and not self.image == self.default_image and not self.image == self.Ted_idle_left and not self.jumpingStraightUp:
-            self.isFalling = True                          # isInJump, canWalk a jumpingStraightUp                 # Cursed AF but kinda works
+            self.isFalling = True
             if self.wasMovingRight == True:
                 self.isFallingRight = True
                 self.image = self.Ted_fall_right
                 self.rect.x += (self.xFallingSpeed) * dt
-                self.xFallingSpeed -= 12                    # SMOOTH FALL
+                self.xFallingSpeed -= 12   # Smooth padani
                 if self.xFallingSpeed < 0:
                     self.xFallingSpeed = 0
                 
@@ -278,6 +279,7 @@ class Player:
                 self.xFallingSpeed -= 12
                 if self.xFallingSpeed < 0:
                     self.xFallingSpeed = 0
+        # Reset na zemi (platforme)
         else:
             self.xFallingSpeed = 300
             if self.canWalk == True and self.isJumping == False and self.movingLeft == False and self.movingRight == False:
@@ -293,50 +295,49 @@ class Player:
         # Kolize
         for obj in map_objects[self.current_screen]:
 
-            # Handle Y-axis collisions
+            # Y-axis kolize
             if self.rect.colliderect(obj):
                 self.rect.y -= 800 * dt
-                # Collision from the top of the object
+                # Kolize zvrchu objektu
                 if self.rect.bottom == obj.rect.top:
                     if obj.topPlatform == True:
                         self.rect.bottom = obj.rect.top
                     
-                # Collision from the bottom of the object
+                # Kolize zespodu objektu
                 elif self.rect.top <= obj.rect.bottom and self.rect.bottom > obj.rect.bottom:
                     if obj.botPlatform == True:
                         self.rect.top = obj.rect.bottom
                         self.bouncingTop = True
         
 
-            # Handle X-axis collisions
+            # X-axis kolize
             self.bouncing = False
-            #player.canWalk = False
 
             if self.rect.colliderect(obj.rect):
-                if self.rect.right >= obj.rect.left and self.rect.left < obj.rect.left:  # Player is on the right, not moving
+                if self.rect.right >= obj.rect.left and self.rect.left < obj.rect.left:
                     self.rect.right = obj.rect.left
                     # Bounce zprava
-                    if self.jumpingRight or self.isFallingRight:###################falling right333333333333333333333333333333333333333333333333333333
+                    if self.jumpingRight or self.isFallingRight:
                         self.jumpingLeft = True
                         self.jumpingRight = False
                         self.wasMovingRight = False
                         self.wasMovingLeft = True
                         self.bouncing = True
-                elif self.rect.left <= obj.rect.right and self.rect.right > obj.rect.right:  # Player is on the left, not moving
+                elif self.rect.left <= obj.rect.right and self.rect.right > obj.rect.right:
                     self.rect.left = obj.rect.right
                     # Bounce zleva
-                    if self.jumpingLeft or self.isFallingLeft:###################falling left333333333333333333333333333333333333333333333333333333333
+                    if self.jumpingLeft or self.isFallingLeft:
                         self.jumpingRight = True
                         self.jumpingLeft = False
                         self.wasMovingLeft = False
                         self.wasMovingRight = True
                         self.bouncing = True
 
-        # Gravity
+        # Stala gravitace
         self.rect.y += 800 * dt
             
 
-        # Prechod na dalsi screen
+        # Prechod hrace na dalsi screen
         if self.rect.y < 0:
             self.current_screen += 1
             self.rect.y = 960
@@ -349,11 +350,5 @@ class Player:
 
 # Kdyz drzim A nebo D pri schazeni platformy dolu tak to neni smooth, jde rovne dolu //// kdyz pada tak self.canWalk = False
 
-# Zachyceni na platforme ------------------- Je to gravitaci        NOT A PROBLEM?? maybe..
-
 # !!!!!!!!!!!!! BIG PROBLEM (?)- ve skoku se da mezernikem zastavit a v padu po skoku taky !!!!!!!!!!!!!!!!!!
-
-#   Coins TEXTURY
-
-#   Dodelat NPC
 

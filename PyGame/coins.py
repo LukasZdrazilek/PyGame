@@ -29,10 +29,47 @@ class Coins:
         self.can_draw = [True, True, True]
 
 
-    
+    # Hrac da coinu NPC (dotkne se ho)
+    def give_coin(self, player, npc):
+        
+        # Koliduje hrac s NPC, ma vic jako 0 coinu a NPC zrovna nerika wisdom
+        if player.rect.colliderect(npc.rect) and player.current_screen == 0 and self.player_coins > 0 and npc.telling_wisdom == False:
+            self.player_coins -= 1
+            npc.telling_wisdom = True
+            npc.told_wisdom += 1
+            
+            # Zacatek casovace rikani wisdomu
+            if npc.told_wisdom == 1:
+                npc.start_wisdom_timer1 = True
+                
+            if npc.told_wisdom == 2:
+                npc.start_wisdom_timer2 = True
+                
+            if npc.told_wisdom == 3:
+                npc.start_wisdom_timer3 = True
+                
+            
+        # NPC rika wisdom, nahraje se aktualni cas a hrac mu nemuze davat coiny dokud neskonci
+        if npc.telling_wisdom:
+            if npc.tells_wisdom:
+                npc.tell_wisdom(player)
+                npc.tells_wisdom = False
+        # Reset play soundu aby se daly nektere pouzit znovu
+        elif not npc.telling_wisdom and not npc.speaking:
+            npc.play_sound1 = True
+            npc.play_sound2 = True
+            npc.play_sound3 = True
+            npc.play_sound_excited = True
+            npc.play_sound_lessExcited = True
+            npc.play_sound_dogFetch = True
+            npc.play_sound_wisdom11 = True
+            npc.play_sound_wisdom12 = True
+            npc.play_sound_wisdom21 = True
+            npc.play_sound_wisdom22 = True
 
 
-    def handle_coins(self, screen, player):
+    # Logika coinu
+    def handle_coins(self, screen, player, npc):
         
         # Prochazeni coinu podle listu can_draw
         for i in range(len(self.can_draw)):
@@ -46,7 +83,7 @@ class Coins:
                     self.image = self.textures[self.image_index]
                     self.last_texture_change = time.time()
 
-                # Vykresleni coin podle pozice hrace
+                # Vykresleni coin podle obrazovky hrace
                 self.rect.x = self.coinsX[player.current_screen]
                 self.rect.y = self.coinsY[player.current_screen]
 
@@ -57,5 +94,8 @@ class Coins:
                     
                     self.player_coins += 1
                     self.can_draw[i] = False
+            
+        # Volani give_coin
+        self.give_coin(player, npc)
                     
         

@@ -1,41 +1,53 @@
 import pygame
         
 
-def save_game(player, game_timer, coins):
+def save_game(player, game_timer, coins, npc):
+    
     with open("save.txt", "w") as file:
+        # Uklada obrazovku na ktere je hrac, hracovu X a Y pozici a cas casovac
         file.write(str(player.current_screen) + '\n')
         file.write(str(player.rect.x) + '\n')
         file.write(str(player.rect.y) + '\n')
         file.write(game_timer.get_time() + '\n')
 
-        # Save the total number of coins (including those not collected)
+        # Uklada maximalni pocet coinu
         file.write(str(len(coins.can_draw)) + '\n')
 
-        # Save the player's collected coins
+        # Uklada hracovy posbirane coiny
         file.write(str(coins.player_coins) + '\n')
         
-        # Save which coins have been collected
+        # Uklada ktere coiny byly posbirany
         for status in coins.can_draw:
             file.write(str(int(status)) + '\n')
+            
+        # Uklada pocet dialogu s NPC (aby se neopakoval po loadu hry)
+        file.write(str(npc.told_wisdom))
 
             
-
-def load_game(player, game_timer, coins):
+def load_game(player, game_timer, coins, npc):
+    
     with open('save.txt', 'r') as file:
+        # Nacita obrazovku na ktere je hrac, hracovu X a Y pozici a cas casovace
         player.current_screen = int(file.readline().strip())
         player.rect.x = int(file.readline().strip())
         player.rect.y = int(file.readline().strip())
         time_str = file.readline().strip()
+        
+        # Set casu casovace
         game_timer.set_time(time_str)
 
-        # Load the total number of coins
+        # Nacita maximalni pocet coinu
         total_coins = int(file.readline().strip())
 
-        # Load the player's collected coins
+        # Nacita hracovy posbirane coiny
         coins.player_coins = int(file.readline().strip())
 
-        # Load which coins have been collected
+        # Nacita coiny, ktere byly posbirany
         coins.can_draw = [bool(int(file.readline().strip())) for _ in range(total_coins)]
+        
+        # Nacita pocet dialogu s NPC
+        npc.told_wisdom = int(file.readline().strip())
+        
 
 
 

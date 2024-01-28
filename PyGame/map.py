@@ -1,11 +1,12 @@
 import pygame
 
-# List objektu mapy  ( vlastne jen jejich kolizi - zdi, platforerm a zeme ) 
+# List objektu mapy  ( vlastne jen jejich kolizi - zdi, platforem a zeme ) 
 map_objects = [[]]
 
 class Map:
     def __init__(self, x, y, width, height, type):
 
+        # Zakladni rectangle a inicializace druhu kolizi
         self.rect = pygame.Rect(x, y, width, height)
         self.topPlatform = False
         self.botPlatform = False
@@ -25,16 +26,17 @@ class Map:
             self.botPlatform = False
 
 
-    # Pouze pro testovani hratelnosti mapy, v samotne hre se pak nepouziva
+    # Pouze pro testovani hratelnosti mapy (aby sla videt), v samotne hre se pak nepouziva
     def draw(self, screen):
         pygame.draw.rect(screen, (0, 255, 0), self.rect)
 
 
+    # Check na kolize hrace a rectanglu mapy
     def collide_with(self, player_rect):
         return self.rect.colliderect(player_rect)
         
 
-# Konstruktor objektu mapy
+# Konstruktor objektu mapy a rozdeleni do listu podle cisla obrazovky
 def create_map_object(x, y, width, height, screenNo, type):
     mapObject = Map(x, y, width, height, type)
     
@@ -46,8 +48,11 @@ def create_map_object(x, y, width, height, screenNo, type):
 
 
 # Funkce ktera cte z textaku mapy podle znaku, '\n' mezi nimi = nova screen
-# '+' = rectangle ktery funguje jako bocni kolize ( zdi a platformy), '-' = nic se nevykresli, 'T' = top platform kdy se aktivuje horni kolize, 
-# 'B' = bot platform kdy se aktivuje spodni kolize, 'S' = solo platform kdy se aktivuji obe kolize
+# '+' = rectangle ktery funguje jako bocni kolize ( zdi a platformy), 
+# '-' = nic se nevykresli, 
+# 'T' = top platform kdy se aktivuje horni kolize, 
+# 'B' = bot platform kdy se aktivuje spodni kolize, 
+# 'S' = solo platform kdy se aktivuji obe horni i spodni kolize
 with open("map.txt", "r") as file:
     content = file.read()
 
