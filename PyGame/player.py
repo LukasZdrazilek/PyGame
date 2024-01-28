@@ -4,7 +4,7 @@ from map import Map
 class Player:
     def __init__(self):
         
-        # Nacitani textur hrace
+        # Nacitani textur a zvuku hrace
         self.default_image = pygame.image.load('Textures/Player/Ted_idle_right.png')
         self.Ted_idle_left = pygame.image.load('Textures/Player/Ted_idle_left.png')
         self.Ted_jump_charge = pygame.image.load('Textures/Player/Ted_jump_charge.png')
@@ -18,6 +18,8 @@ class Player:
         self.Ted_walk2_right = pygame.image.load('Textures/Player/Ted_walk2_right.png')
         self.Ted_walk3_left = pygame.image.load('Textures/Player/Ted_walk3_left.png')
         self.Ted_walk3_right = pygame.image.load('Textures/Player/Ted_walk3_right.png')
+        
+        self.bounce_sound = pygame.mixer.Sound('Sound/bounce.wav')
 
         # Set default textury a velikosti rectanglu
         self.image = self.default_image
@@ -318,6 +320,7 @@ class Player:
                     self.rect.right = obj.rect.left
                     # Bounce zprava
                     if self.jumpingRight or self.isFallingRight:
+                        self.bounce_sound.play()
                         self.jumpingLeft = True
                         self.jumpingRight = False
                         self.wasMovingRight = False
@@ -327,6 +330,7 @@ class Player:
                     self.rect.left = obj.rect.right
                     # Bounce zleva
                     if self.jumpingLeft or self.isFallingLeft:
+                        self.bounce_sound.play()
                         self.jumpingRight = True
                         self.jumpingLeft = False
                         self.wasMovingLeft = False

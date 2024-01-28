@@ -4,12 +4,14 @@ import time
 class Coins:
     def __init__(self):
         
-        # Nacitani textur
+        # Nacitani textur a zvuku sebrani coiny
         self.textures = [
             pygame.image.load('Textures/Coin/coin1.png'),
             pygame.image.load('Textures/Coin/coin2.png'),
             pygame.image.load('Textures/Coin/coin3.png')
         ]
+        
+        self.coin = pygame.mixer.Sound('Sound/coin.wav')
 
         # Pomocne veci
         self.pattern = [0, 1, 2, 1]
@@ -92,6 +94,7 @@ class Coins:
                 # Sebrani coiny
                 if self.rect.colliderect(player.rect) and self.can_draw[i]:
                     
+                    self.coin.play()
                     self.player_coins += 1
                     self.can_draw[i] = False
             
