@@ -56,20 +56,8 @@ class Coins:
             if npc.tells_wisdom:
                 npc.tell_wisdom(player)
                 npc.tells_wisdom = False
-        # Reset play soundu aby se daly nektere pouzit znovu
-        elif not npc.telling_wisdom and not npc.speaking:
-            npc.play_sound1 = True
-            npc.play_sound2 = True
-            npc.play_sound3 = True
-            npc.play_sound_excited = True
-            npc.play_sound_lessExcited = True
-            npc.play_sound_dogFetch = True
-            npc.play_sound_wisdom11 = True
-            npc.play_sound_wisdom12 = True
-            npc.play_sound_wisdom21 = True
-            npc.play_sound_wisdom22 = True
 
-
+    
     # Logika coinu
     def handle_coins(self, screen, player, npc):
         
